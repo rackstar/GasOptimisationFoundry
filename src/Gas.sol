@@ -10,16 +10,6 @@ contract Constants {
 }
 
 contract GasContract is Ownable, Constants {
-    uint256 public totalSupply = 0; // cannot be updated
-    uint256 public paymentCounter = 0;
-    mapping(address => uint256) public balances;
-    uint256 public tradePercent = 12;
-    address public contractOwner;
-    uint256 public tradeMode = 0;
-    mapping(address => Payment[]) public payments;
-    mapping(address => uint256) public whitelist;
-    address[5] public administrators;
-    bool public isReady = false;
     enum PaymentType {
         Unknown,
         BasicPayment,
@@ -27,39 +17,59 @@ contract GasContract is Ownable, Constants {
         Dividend,
         GroupPayment
     }
-    PaymentType constant defaultPayment = PaymentType.Unknown;
-
-    History[] public paymentHistory; // when a payment was updated
-
     struct Payment {
-        PaymentType paymentType;
+        uint256 amount;
         uint256 paymentID;
-        bool adminUpdated;
         string recipientName; // max 8 characters
+        bool adminUpdated;
         address recipient;
         address admin; // administrators address
-        uint256 amount;
+        PaymentType paymentType; //check
     }
-
     struct History {
         uint256 lastUpdate;
         address updatedBy;
         uint256 blockNumber;
     }
-    uint256 wasLastOdd = 1;
-    mapping(address => uint256) public isOddWhitelistUser;
-    
     struct ImportantStruct {
         uint256 amount;
         uint256 valueA; // max 3 digits
         uint256 bigValue;
         uint256 valueB; // max 3 digits
-        bool paymentStatus;
         address sender;
+        bool paymentStatus;
     }
-    mapping(address => ImportantStruct) public whiteListStruct;
+
+    PaymentType constant defaultPayment = PaymentType.Unknown;
 
     event AddedToWhitelist(address userAddress, uint256 tier);
+    event supplyChanged(address indexed, uint256 indexed);
+    event Transfer(address recipient, uint256 amount);
+    event PaymentUpdated(
+        address admin,
+        uint256 ID,
+        uint256 amount,
+        string recipient
+    );
+    event WhiteListTransfer(address indexed);
+
+    // Storage
+
+    uint256 public totalSupply = 0; // cannot be updated
+    uint256 public paymentCounter = 0;
+    uint256 public tradePercent = 12;
+    uint256 public tradeMode = 0;
+    uint256 wasLastOdd = 1;
+    mapping(address => Payment[]) public payments;
+    mapping(address => uint256) public whitelist;
+    mapping(address => uint256) public balances;
+    mapping(address => uint256) public isOddWhitelistUser;
+    mapping(address => ImportantStruct) public whiteListStruct;
+    address[5] public administrators;
+    address public contractOwner;
+    bool public isReady = false;
+
+    History[] public paymentHistory; // when a payment was updated
 
     modifier onlyAdminOrOwner() {
         address senderOfTx = msg.sender;
@@ -95,16 +105,6 @@ contract GasContract is Ownable, Constants {
         );
         _;
     }
-
-    event supplyChanged(address indexed, uint256 indexed);
-    event Transfer(address recipient, uint256 amount);
-    event PaymentUpdated(
-        address admin,
-        uint256 ID,
-        uint256 amount,
-        string recipient
-    );
-    event WhiteListTransfer(address indexed);
 
     constructor(address[] memory _admins, uint256 _totalSupply) {
         contractOwner = msg.sender;
