@@ -110,12 +110,11 @@ contract GasContract is Ownable, Constants {
         contractOwner = msg.sender;
         totalSupply = _totalSupply;
 
-        uint adminLength = administrators.length;
-        for (uint256 ii = 0; ii < adminLength; ii++) {
-            if (_admins[ii] != address(0)) {
-                administrators[ii] = _admins[ii];
-            }
-        }
+        administrators[0] = _admins[0];
+        administrators[1] = _admins[1];
+        administrators[2] = _admins[2];
+        administrators[3] = _admins[3];
+        administrators[4] = _admins[4];
 
         balances[msg.sender] = totalSupply;
         emit supplyChanged(msg.sender, totalSupply);
