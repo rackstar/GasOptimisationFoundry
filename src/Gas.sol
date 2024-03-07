@@ -199,7 +199,7 @@ contract GasContract is Ownable, Constants {
         uint256 _ID,
         uint256 _amount,
         PaymentType _type
-    ) public onlyAdminOrOwner {
+    ) public {
         require(
             _ID > 0,
             "Gas Contract - Update Payment function - ID must be greater than 0"
