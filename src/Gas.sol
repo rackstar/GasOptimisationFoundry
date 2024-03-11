@@ -7,14 +7,14 @@ contract GasContract {
 
     // Storage
 
-    mapping(address => uint256) public balances;
     // replace whitelistAmount map with a single uint256 to simplify
     uint256 prevAmount;
+    mapping(address => uint256) public balances;
 
     constructor(address[] memory, uint256 _totalSupply) {
         balances[msg.sender] = _totalSupply;
     }
-    
+
     /// replace whitelist mapping with a getter hardcoded to 0 to get rid of all relevant whitelist tier logic
     function whitelist(address) public pure returns (uint256) {
         return 0;
@@ -47,9 +47,8 @@ contract GasContract {
         return true;
     }
 
-    function balanceOf(address _user) public view returns (uint256 balance_) {
-        uint256 balance = balances[_user];
-        return balance;
+    function balanceOf(address _user) public view returns (uint256) {
+        return balances[_user];
     }
 
     function transfer(
@@ -73,6 +72,7 @@ contract GasContract {
 
     /// read whitelist tier only once
     /// uncheck arithmetic operations
+    /// store _amount to a single uint256 var instead of a mapping
     function whiteTransfer(
         address _recipient,
         uint256 _amount
@@ -88,6 +88,7 @@ contract GasContract {
     }
 
     /// hardcode true
+    /// grab prev _amount param from a uint256 var instead of a mapping
     function getPaymentStatus(address) public view returns (bool, uint256) {
         return (true, prevAmount);
     }
