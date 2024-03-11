@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.0;
-
-import "./Ownable.sol";
+pragma solidity 0.8.24;
 
 contract Constants {
     uint256 public tradeFlag = 1;
