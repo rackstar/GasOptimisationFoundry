@@ -65,25 +65,19 @@ contract GasContract {
     /// simplify whitelist tier logic with ternary
     /// use custom errors instead of requires
     function addToWhitelist(address _userAddrs, uint256 _tier) public {
-        if (msg.sender != address(0x1234)) revert();
-        if (_tier >= 255) revert();
+        require(msg.sender == address(0x1234) && _tier < 255);
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
     /// read whitelist tier only once
     /// uncheck arithmetic operations
     /// store _amount to a single uint256 var instead of a mapping
-    function whiteTransfer(
-        address _recipient,
-        uint256 _amount
-    ) public {
+    function whiteTransfer(address _recipient, uint256 _amount) external {
         prevAmount = _amount;
-
         unchecked {
             balances[msg.sender] -= _amount;
             balances[_recipient] += _amount;
         }
-
         emit WhiteListTransfer(_recipient);
     }
 
