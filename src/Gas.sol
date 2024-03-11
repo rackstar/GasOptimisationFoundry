@@ -17,7 +17,7 @@ contract GasContract {
     constructor(address[] memory _admins, uint256 _totalSupply) {
         balances[msg.sender] = _totalSupply;
     }
-    
+
     /// hardcode administrators - saves 83,560 gas
     function administrators(uint index) public pure returns (address admin) {
         assembly {
@@ -40,7 +40,7 @@ contract GasContract {
         }
     }
 
-    /// hardcode checkforAdmin
+    /// hardcode true
     function checkForAdmin(address _user) public pure returns (bool) {
         return true;
     }
@@ -73,7 +73,7 @@ contract GasContract {
         whitelist[_userAddrs] = _tier > 3 ? 3 : _tier;
         emit AddedToWhitelist(_userAddrs, _tier);
     }
-    
+
     /// read whitelist tier only once
     /// uncheck arithmetic operations
     function whiteTransfer(
@@ -93,6 +93,7 @@ contract GasContract {
         emit WhiteListTransfer(_recipient);
     }
 
+    /// hardcode true
     function getPaymentStatus(address sender) public view returns (bool, uint256) {
         return (true, whiteListAmount[sender]);
     }
