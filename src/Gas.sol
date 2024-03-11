@@ -7,7 +7,7 @@ contract Constants {
     uint256 public dividendFlag = 1;
 }
 
-contract GasContract is Ownable, Constants {
+contract GasContract is Constants {
     enum PaymentType {
         Unknown,
         BasicPayment,
@@ -38,11 +38,8 @@ contract GasContract is Ownable, Constants {
         bool paymentStatus;
     }
 
-    PaymentType constant defaultPayment = PaymentType.Unknown;
-
     event AddedToWhitelist(address userAddress, uint256 tier);
     event supplyChanged(address indexed, uint256 indexed);
-    event Transfer(address recipient, uint256 amount);
     event PaymentUpdated(
         address admin,
         uint256 ID,
@@ -54,9 +51,7 @@ contract GasContract is Ownable, Constants {
     // Storage
 
     uint256 public totalSupply = 0; // cannot be updated
-    uint256 public paymentCounter = 0;
     uint256 public tradePercent = 12;
-    uint256 public tradeMode = 0;
     uint256 wasLastOdd = 1;
     mapping(address => Payment[]) public payments;
     mapping(address => uint256) public whitelist;
@@ -65,7 +60,6 @@ contract GasContract is Ownable, Constants {
     mapping(address => ImportantStruct) public whiteListStruct;
     address[5] public administrators;
     address public contractOwner;
-    bool public isReady = false;
 
     History[] public paymentHistory; // when a payment was updated
 
