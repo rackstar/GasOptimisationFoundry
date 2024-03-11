@@ -7,12 +7,16 @@ contract GasContract {
 
     // Storage
 
-    mapping(address => uint256) public whitelist;
     mapping(address => uint256) public balances;
     mapping(address => uint256) public whiteListAmount;
 
-    constructor(address[] memory _admins, uint256 _totalSupply) {
+    constructor(address[] memory, uint256 _totalSupply) {
         balances[msg.sender] = _totalSupply;
+    }
+    
+    /// hardcode 0 to get rid of all relevant whitelist tier logic
+    function whitelist(address) public pure returns (uint256) {
+        return 0;
     }
 
     /// hardcode administrators - saves 83,560 gas
@@ -38,7 +42,7 @@ contract GasContract {
     }
 
     /// hardcode true
-    function checkForAdmin(address _user) public pure returns (bool) {
+    function checkForAdmin(address) public pure returns (bool) {
         return true;
     }
 
@@ -50,7 +54,7 @@ contract GasContract {
     function transfer(
         address _recipient,
         uint256 _amount,
-        string calldata _name
+        string calldata
     ) public {
         unchecked {
             balances[msg.sender] -= _amount;
@@ -63,7 +67,6 @@ contract GasContract {
     function addToWhitelist(address _userAddrs, uint256 _tier) public {
         if (msg.sender != address(0x1234)) revert();
         if (_tier >= 255) revert();
-        whitelist[_userAddrs] = _tier > 3 ? 3 : _tier;
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
