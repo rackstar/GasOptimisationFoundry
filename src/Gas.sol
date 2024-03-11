@@ -2,9 +2,6 @@
 pragma solidity 0.8.24;
 
 contract GasContract {
-    error IncorrectTier();
-    error IncorrectAddress();
-
     event AddedToWhitelist(address userAddress, uint256 tier);
     event WhiteListTransfer(address indexed);
 
@@ -64,12 +61,8 @@ contract GasContract {
     /// simplify whitelist tier logic with ternary
     /// use custom errors instead of requires
     function addToWhitelist(address _userAddrs, uint256 _tier) public {
-        if (msg.sender != address(0x1234)) {
-            revert IncorrectAddress();
-        }
-        if (_tier >= 255) {
-            revert IncorrectTier();
-        }
+        if (msg.sender != address(0x1234)) revert();
+        if (_tier >= 255) revert();
         whitelist[_userAddrs] = _tier > 3 ? 3 : _tier;
         emit AddedToWhitelist(_userAddrs, _tier);
     }
